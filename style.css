@@ -1,0 +1,108 @@
+:root {
+  --purple: hsl(259, 100%, 65%);
+  --red: hsl(0, 100%, 67%);
+  --off-white: hsl(0, 0%, 94%);
+  --light-grey: hsl(0, 0%, 86%);
+  --smokey-grey: hsl(0, 1%, 44%);
+  --off-black: hsl(0, 0%, 8%);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+  font-family: Poppins, sans-serif;
+}
+
+body {
+  background-color: var(--light-grey);
+}
+
+label {
+  display: block;
+  text-transform: uppercase;
+  color: var(--smokey-grey);
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+input:focus {
+  outline: 1px solid var(--purple);
+}
+
+input {
+  width: 100%;
+  padding: 0.8rem;
+  font-size: 1.8rem;
+  font-weight: 600;
+  border-radius: 0.6rem;
+  border: 1px solid var(--light-grey);
+}
+
+.container {
+  width: 35rem;
+  margin: 4.8rem auto;
+  padding: 2.4rem 1.8rem;
+  background-color: #fff;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  border-radius: 1rem;
+  border-bottom-right-radius: 50%;
+}
+
+.date-block {
+  display: flex;
+  min-width: 100%;
+  gap: 2.4rem;
+  margin-bottom: 2.4rem;
+}
+
+img {
+  background-color: var(--purple);
+  margin-left: 40%;
+  border-radius: 50%;
+  padding: 0.8rem;
+}
+
+p {
+  font-style: italic;
+  font-size: 4.8rem;
+  font-weight: 900;
+}
+
+span {
+  font-style: italic;
+  color: var(--purple);
+}
+
+.error {
+  font-style: normal;
+  color: red;
+  margin-left: 0.2rem;
+  width: 100%;
+}
+
+.hidden {
+  display: none;
+}
+
+.day span,
+.month span,
+.year span {
+  line-height: 0.8;
+  margin-right: 4rem;
+}
+
+@media (min-width: 860px) {
+  html {
+    font-size: 100%;
+  }
+  .container {
+    width: 50rem;
+  }
+}
