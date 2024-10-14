@@ -4,4 +4,4 @@
 
 # Live Site Url
 
-https://naveenprasad07.github.io/age-calculator-9.git
+https://naveenprasad07.github.io/age-calculator-9
