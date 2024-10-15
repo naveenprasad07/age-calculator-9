@@ -1,33 +1,12 @@
 const dayEl = document.getElementById("day");
 const monthEl = document.getElementById("month");
 const yearEl = document.getElementById("year");
-
 const arrowBtn = document.getElementById("arrow");
 
-const isBlank = (val) => "" === val;
-
-const notNumber = (input) => {
-  const regex = /[^\d]/;
-  return regex.test(input);
-};
-
-const isRange = (input, min, max) => {
-  return min <= input && input <= max;
-};
-
-const displayNumberError = (el) => {
-  el.classList.remove("hidden");
-  el.innerText = "This Field must contain only number";
-};
-
-const displayErrorEmpty = (el) => {
-  el.classList.remove("hidden");
-  el.innerText = "This Field cannot be empty";
-};
-
-const displayRangeError = (el, min, max) => {
-  el.classList.remove("hidden");
-  el.innerText = `This range is from ${min} and ${max}`;
+const errorElements = {
+  day: dayEl.nextElementSibling,
+  month: monthEl.nextElementSibling,
+  year: yearEl.nextElementSibling,
 };
 
 function calculateAge(birthDate) {
@@ -54,67 +33,52 @@ function calculateAge(birthDate) {
   return { years, months, days };
 }
 
-const checkDay = (dayVal) => {
-  if (isBlank(dayVal)) {
-    displayErrorEmpty(dayEl.nextElementSibling);
-    return false;
-  } else if (notNumber(dayVal)) {
-    displayNumberError(dayEl.nextElementSibling);
-    return false;
-  }
-  if (!isRange(dayVal, 1, 31)) {
-    displayRangeError(dayEl.nextElementSibling, 1, 31);
-    return false;
-  }
-
-  return true;
+const isInvalidInput = (val, min, max) => {
+  if (val === "") return "This Field cannot be empty";
+  if (/\D/.test(val)) return "This Field must contain only numbers";
+  if (val < min || val > max) return `This range is from ${min} and ${max}`;
+  return null;
 };
 
-const checkYear = (yearVal) => {
-  if (isBlank(yearVal)) {
-    displayErrorEmpty(yearEl.nextElementSibling);
-    return false;
-  } else if (notNumber(yearVal)) {
-    displayNumberError(yearEl.nextElementSibling);
-    return false;
-  }
-  if (!isRange(yearVal, 1900, 3000)) {
-    displayRangeError(yearEl.nextElementSibling, 1900, 3000);
-    return false;
-  }
-  return true;
+const displayError = (el, message) => {
+  el.classList.remove("hidden");
+  el.innerText = message;
 };
 
-const checkMonth = (monthVal) => {
-  if (isBlank(monthVal)) {
-    displayErrorEmpty(monthEl.nextElementSibling);
-    return false;
-  } else if (notNumber(monthVal)) {
-    displayNumberError(monthEl.nextElementSibling);
-    return false;
-  }
-  if (!isRange(+monthVal, 1, 12)) {
-    displayRangeError(monthEl.nextElementSibling, 1, 12);
-    return false;
-  }
-  return true;
+const hideAllErrors = () => {
+  Object.values(errorElements).forEach((el) => el.classList.add("hidden"));
 };
 
-const removeAllError = () => {
-  dayEl.nextElementSibling.classList.add("hidden");
-  monthEl.nextElementSibling.classList.add("hidden");
-  yearEl.nextElementSibling.classList.add("hidden");
-};
-
-arrowBtn.addEventListener("click", function () {
+const validateInput = () => {
   const dayVal = dayEl.value;
   const monthVal = monthEl.value;
   const yearVal = yearEl.value;
 
-  removeAllError();
+  hideAllErrors();
 
-  if (checkDay(dayVal) && checkMonth(monthVal) && checkYear(yearVal)) {
-    const birthDate = new Date(yearVal, monthVal, dayVal); // 31st July 2002 (Note: month is 0-indexed, so 6 = July)
+  const dayError = isInvalidInput(dayVal, 1, 31);
+  const monthError = isInvalidInput(monthVal, 1, 12);
+  const yearError = isInvalidInput(yearVal, 1900, 3000);
+
+  if (dayError) {
+    displayError(errorElements.day, dayError);
+    return false;
+  }
+  if (monthError) {
+    displayError(errorElements.month, monthError);
+    return false;
+  }
+  if (yearError) {
+    displayError(errorElements.year, yearError);
+    return false;
+  }
+
+  return true;
+};
+
+const calcAge = () => {
+  if (validateInput()) {
+    const birthDate = new Date(yearEl.value, monthEl.value - 1, dayEl.value);
     const age = calculateAge(birthDate);
 
     document.getElementById("year-span").innerText = age.years;
@@ -123,5 +87,13 @@ arrowBtn.addEventListener("click", function () {
     console.log(
       `Age: ${age.years} years, ${age.months} months, and ${age.days} days.`
     );
+  }
+};
+
+arrowBtn.addEventListener("click", calcAge);
+
+window.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    calcAge();
   }
 });
